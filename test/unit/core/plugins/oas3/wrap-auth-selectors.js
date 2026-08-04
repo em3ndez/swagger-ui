@@ -2,7 +2,7 @@
 import { fromJS, Map } from "immutable"
 import {
   definitionsToAuthorize
-} from "corePlugins/oas3/auth-extensions/wrap-selectors"
+} from "core/plugins/oas3/auth-extensions/wrap-selectors"
 
 describe("oas3 plugin - auth extensions - wrapSelectors", function(){
 
@@ -15,12 +15,14 @@ describe("oas3 plugin - auth extensions - wrapSelectors", function(){
         getState: () => new Map(),
         specSelectors: {
           specJson: () => fromJS({
-            openapi: "3.0.0"
+            openapi: "3.0.4"
           }),
+          isOAS3: () => true,
           securityDefinitions: () => {
             return fromJS({
               "oauth2AuthorizationCode": {
                 "type": "oauth2",
+                "description": "Some Oauth2 endpoint",
                 "flows": {
                   "authorizationCode": {
                     "authorizationUrl": "http://google.com/",
@@ -105,7 +107,8 @@ describe("oas3 plugin - auth extensions - wrapSelectors", function(){
             scopes: {
               "myScope": "our only scope"
             },
-            type: "oauth2"
+            type: "oauth2",
+            description: "Some Oauth2 endpoint"
           }
         },
         {
@@ -201,7 +204,7 @@ describe("oas3 plugin - auth extensions - wrapSelectors", function(){
           //   OPTIONAL. JSON array containing a list of the OAuth 2.0 Grant Type values that
           //   this OP supports. Dynamic OpenID Providers MUST support the authorization_code
           //   and implicit Grant Type values and MAY support other Grant Types. If omitted,
-          //   the default value is ["authorization_code", "implicit"]. 
+          //   the default value is ["authorization_code", "implicit"].
           oidcNoGrant: {
             flow: "authorization_code",
             authorizationUrl: "https://accounts.google.com/o/oauth2/v2/auth",
